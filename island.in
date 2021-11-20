@@ -1,0 +1,140 @@
+title:
+         Flow around isolated Seamount
+
+!resolution 
+ time_stepping: NTIMES   dt[sec]  NDTFAST  NINFO
+               260001     40.     60       50 
+
+S-coord: THETA_S,   THETA_B,    TCLINE (m)
+           1.d0      6.d0        100.d0
+
+!initial: NRREC / filename
+!           0 
+!                 restart.nc
+
+restart:  NRST, NRPFRST / filename
+           50000    1
+                          restart.nc
+averages: NTSAVG, NAVG, NRPFAVG / filename
+            20000   4000    0
+           elliptical_avg.nc
+
+history: LDEFHIS, NWRT, NRPFHIS / filename 
+            T      1000     5 
+                 elliptical_his.nc
+
+primary_history_fields: zeta UBAR VBAR  U  V   wrtT(1:NT)
+                          T    T    T   T  T    T   T
+
+auxiliary_history_fields: rho Omega  W  Akv  Akt   HBL   HBBL 
+                           F   F     T   T    F     T     T
+
+primary_averages: zeta UBAR VBAR  U  V   wrtT(1:NT)
+                   T    T    T   T  T    T T F F F F F F F
+
+
+auxiliary_averages: rho Omega  W  Akv  Akt  Aks  HBL HBBL
+                     F   F     T   T    F    F    T   T
+
+rho0:
+      1025.d0
+
+lin_EOS_cff: R0[kg/m^3] T0[deg C] TCOEF   
+              0.d0       0.d0     1.0d0    
+
+lateral_visc: VISC2
+               0.
+
+tracer_diff2: TNU2(1:NT)[m^2/sec for all]
+               0.												
+
+vertical_mixing: Akv_bak Akt_bak(1:NT) [m^2/sec for all]
+                 1.0d-4   1.0d-4  
+
+bottom_drag:     RDRG [m/s],  RDRG2,  Zob [m],  Cdb_min, Cdb_max
+                 0.E-3         0.0E-3     1.E-2     1.E-4    1.E-2
+
+gamma2:
+       -1.d0
+
+v_sponge:   V_SPONGE [m^2/sec]
+              50.
+
+nudg_cof:   TauM2_in/out         attnM2     TauM3_in/out        TauT_in/out [days for all]
+             300000.  300000.    0.005     300000.  300000.      300000.  300000.
+
+diags_uv:   ldefdiags_uv, nwrtdiags_uv, nrpfdiags_uv /filename
+                   T          1000       5
+                                 elliptical_diags_uv.nc
+
+diags_uv_avg: ldefdiags_uv_avg  ntsdiags_uv_avg  nwrtdiags_uv_avg  nprfdiags_uv_avg /filename
+               T          30000           3000          5
+                                 elliptical_diags_uv_avg.nc
+
+diags_uv_history_fields: diag_momentum(1:2)
+                            T T
+
+diags_uv_average_fields: diag_momentum_avg(1:2)
+                            T T
+
+
+diags_ts:   ldefdiags_ts, nwrtdiags_ts, nrpfdiags_ts /filename
+                   T          1000       5
+                                 elliptical_diags_ts.nc
+
+diags_ts_avg: ldefdiags_ts_avg  ntsdiags_ts_avg  nwrtdiags_ts_avg  nprfdiags_ts_avg /filename 
+               T          10000           4000          0
+                                 seamount_diags_ts_avg.nc
+
+diags_ts_history_fields: diag_momentum(1:2)
+                            T T
+
+diags_ts_average_fields: diag_momentum_avg(1:2)
+                    T T
+
+
+
+
+diags_vrt:   ldefdiags_vrt, nwrtdiags_vrt, nrpfdiags_vrt /filename
+                   T          600       0
+                                 elliptical_diags_vrt.nc
+
+diags_vrt_avg: ldefdiags_vrt_avg  ntsdiags_vrt_avg  nwrtdiags_vrt_avg  nprfdiags_vrt_avg /filename
+               T          10000           4000          0
+                                 elliptical_diags_vrt_avg.nc
+
+diags_vrt_history_fields: diags_vrt
+                            T
+
+diags_vrt_average_fields: diags_vrt_avg
+				T
+
+diags_pv:   ldefdiags_pv, nwrtdiags_pv, nrpfdiags_pv /filename
+                   T          2000         0
+                                 elliptical_diags_pv.nc
+
+diags_pv_avg: ldefdiags_pv_avg  ntsdiags_pv_avg  nwrtdiags_pv_avg  nprfdiags_pv_avg /filename
+               T          10000           2000            0
+                                 elliptical_diags_pv_avg.nc
+
+diags_pv_history_fields: diags_pv
+                            T
+
+diags_pv_average_fields: diags_pv_avg
+                    T
+
+
+
+diags_eddy:   ldefdiags_eddy, nwrtdiags_eddy, nrpfdiags_eddy /filename
+                   T          4000         0
+                                 elliptical_diags_eddy.nc
+
+diags_eddy_avg: ldefdiags_eddy_avg  ntsdiags_eddy_avg  nwrtdiags_eddy_avg  nprfdiags_eddy_avg /filename
+               T          10000           4000            0
+                                 elliptical_diags_eddy_avg.nc
+
+diags_eddy_history_fields: diags_eddy
+                            T
+
+diags_eddy_average_fields: diags_eddy_avg
+			    T	

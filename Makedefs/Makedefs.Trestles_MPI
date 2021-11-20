@@ -1,0 +1,45 @@
+# [1] Machine independent rules and definitions.
+#==== ======= =========== ===== === ============
+.SUFFIXES: .o .f .i .F
+
+.F.o:
+	$(CPP) -P $(CPPFLAGS) $*.F | ./mpc > $*.f
+	$(CFT) -c $(FFLAGS) $*.f -o $*.o
+#	/bin/rm $*.f
+.F.f:
+	$(CPP) -P $(CPPFLAGS) $*.F | ./mpc > $*.f
+.f.o:
+	$(CFT) -c $(FFLAGS) $*.f -o $*.o
+
+.F:
+	$(LDR) -o $@ $(LDFLAGS) $<
+.f:
+	$(LDR) -o $@ $(LDFLAGS) $<
+
+# [2] Machine dependent definitions
+#==== ======= ========= ===========
+# CPP           Name of the C preprocessor
+# CPPFLAGS      Flags to the C preprocessor
+# CFT           Name of the fortran compiler to use
+# FFLAGS        Flags to the fortran compiler
+# LDR           Program to load the objects into an executable
+# LDFLAGS       Flags to the loader
+#
+#      CPP = cpp -traditional -DSGI
+      CPP = cpp -traditional
+# CPPFLAGS = -I ${HOME}/netcdf/include -DHOFFMAN2
+# CPPFLAGS = -I ${HOME}/netcdf/include
+# CPPFLAGS = -I/opt/netcdf/4.3.1.1/pgi/mvapich2/ib/include
+ CPPFLAGS = -I/opt/netcdf/4.3.1.1/intel/mvapich2/ib/include
+      CFT = mpif90 -f90=ifort
+#      CFT = mpif90 -f90=pgf90
+      LDR = $(CFT)
+#      FFLAGS = -check all -i4 -r8 -mp1 -module .
+###   FFLAGS = -O2 -align dcommons -unroll0 -extend_source -i4 -r8 -fltconsistency -module .
+   FFLAGS = -O2 -align dcommons -unroll0 -extend_source -i4 -r8 -fp-model strict -mp1 -module .
+#   FFLAGS = -O2 
+  LDFLAGS =
+#     LCDF = -L/opt/netcdf/4.3.1.1/pgi/mvapich2/ib/lib -lnetcdff -lnetcdf
+     LCDF = -L/opt/netcdf/4.3.1.1/intel/mvapich2/ib/lib -lnetcdff -lnetcdf
+#     LCDF = -L${HOME}/netcdf/lib -lnetcdf
+   MPIINC = 

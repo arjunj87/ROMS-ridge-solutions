@@ -1,0 +1,51 @@
+#Definitions for Intel ifc FORTRAN compiler on Linux
+# =========== === ===== === ======= ======== == =====
+
+.SUFFIXES: .o .f .F
+
+.F.o:
+	$(CPP) -P $(CPPFLAGS) $*.F | ./mpc > $*.f
+	$(CFT) -c $(FFLAGS) $*.f -o $*.o
+#/bin/rm -f $*.f
+.F.f:
+	$(CPP) -P $(CPPFLAGS) $*.F | ./mpc > $*.f
+.f.o:
+	$(CFT) -c $(FFLAGS) $*.f -o $*.o
+.F:
+	$(CFT) -o $@ $(FFLAGS) $(LDFLAGS) $<
+.f:
+	$(CFT) -o $@ $(FFLAGS) $(LDFLAGS) $<
+.o:
+	$(CFT) -o $@ $(FFLAGS) $(LDFLAGS) $<
+
+
+#
+# C-preprocessor from Intel compiler package. Note: in this case
+# __IFC is a pre-defined macro, so there is no need to include it
+# into CPPFLAGS.
+#
+#     CPP = fpp
+
+      CPP = /lib/cpp -traditional
+ CPPFLAGS = -D__IFC -I/u/local/compilers/intel-cs/2013.0.028/mpi/intel64/include -I$(NETCDF)/include -DHOFFMAN2
+
+
+        LARGE_MEM_FLAG = -mcmodel=medium -i-dynamic
+
+#        OMP_FLAG = -fpp2 -openmp
+
+	CFT = mpiifort -align dcommon -auto -stack_temps -xsse2
+
+        LDR = mpiifort -align dcommon -auto -stack_temps -xsse2
+
+        FFLAGS = -O3
+
+ 	LDFLAGS = 
+
+ 	COMP_FILES = work.pc work.pcl ifc??????
+
+ 	LCDF = -L$(NETCDF)/lib/ -lnetcdff
+
+ 	LMPI = -L/u/local/compilers/intel-cs/2013.0.028/mpi/intel64/lib/
+
+
